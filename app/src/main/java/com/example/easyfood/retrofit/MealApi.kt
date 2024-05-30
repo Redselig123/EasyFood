@@ -1,6 +1,6 @@
 package com.example.easyfood.retrofit
 
-import com.example.easyfood.pojo.Category
+
 import com.example.easyfood.pojo.CategoryList
 import com.example.easyfood.pojo.MealsByCategoryList
 import com.example.easyfood.pojo.MealList

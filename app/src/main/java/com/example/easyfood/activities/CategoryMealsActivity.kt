@@ -2,13 +2,9 @@ package com.example.easyfood.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.easyfood.R
 import com.example.easyfood.adapter.CategoriesMealsAdapter
 import com.example.easyfood.databinding.ActivityCategoryMealsBinding
 import com.example.easyfood.fragments.HomeFragment
