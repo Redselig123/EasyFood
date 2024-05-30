@@ -12,6 +12,7 @@ class CategoriesAdapter() : RecyclerView.Adapter<CategoriesAdapter.CategoriesVie
         RecyclerView.ViewHolder(binding.root)
 
     private var categoryList = ArrayList<Category>()
+    var onItemClick : ((Category) ->Unit)? = null
 
     fun setCategoriesList(categoryList: List<Category>) {
         this.categoryList = categoryList as ArrayList<Category>
@@ -38,6 +39,10 @@ class CategoriesAdapter() : RecyclerView.Adapter<CategoriesAdapter.CategoriesVie
             .into(holder.binding.imgCategory)
 
         holder.binding.tvCategoryName.text = categoryList[position].strCategory
+
+        holder.itemView.setOnClickListener {
+            onItemClick!!.invoke(categoryList[position])
+        }
     }
 
 
