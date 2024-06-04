@@ -5,12 +5,17 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import com.bumptech.glide.Glide
 import com.example.easyfood.R
 import com.example.easyfood.databinding.ActivityMealBinding
+import com.example.easyfood.db.MealDatabase
 import com.example.easyfood.fragments.HomeFragment
+import com.example.easyfood.pojo.Meal
 import com.example.easyfood.viewModel.MealViewModel
+import com.example.easyfood.viewModel.MealViewModelFactory
 
 class MealActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMealBinding
@@ -25,7 +30,9 @@ class MealActivity : AppCompatActivity() {
         binding = ActivityMealBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mealMvvm = ViewModelProvider(this)[MealViewModel::class.java]
+        val mealDatabase = MealDatabase.getInstance(this)
+        val viewModelFactory = MealViewModelFactory(mealDatabase)
+        mealMvvm = ViewModelProvider(this, viewModelFactory).get(MealViewModel::class.java)
 
         getMealInformation()
         setInformationInView()
@@ -37,7 +44,17 @@ class MealActivity : AppCompatActivity() {
         binding.imgYoutube.setOnClickListener{
             onYoutubeImgClick()
         }
+        onFavoriteClick()
 
+    }
+
+    private fun onFavoriteClick() {
+        binding.btnFavoriteButton.setOnClickListener {
+            mealToSave?.let {
+                mealMvvm.insertMeal(it)
+                Toast.makeText(this, "Meal saved", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun onYoutubeImgClick() {
@@ -45,6 +62,7 @@ class MealActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private var mealToSave: Meal?=null
     private fun observeMealDetail() {
         mealMvvm.observeMealDetailLiveData().observe(this)
         { meal->
@@ -53,7 +71,9 @@ class MealActivity : AppCompatActivity() {
             binding.tvMealArea.text = "Area: ${meal.strArea}"
             binding.tvMealInstructions.text = meal.strInstructions
 
-            youtubeLink = meal.strYoutube
+            mealToSave = meal
+
+            youtubeLink = meal.strYoutube.toString()
         }
     }
 
