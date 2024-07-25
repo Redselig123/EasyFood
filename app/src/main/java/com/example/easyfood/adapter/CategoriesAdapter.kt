@@ -14,6 +14,7 @@ class CategoriesAdapter() : RecyclerView.Adapter<CategoriesAdapter.CategoriesVie
     private var categoryList = ArrayList<Category>()
     var onItemClick : ((Category) ->Unit)? = null
 
+
     fun setCategoriesList(categoryList: List<Category>) {
         this.categoryList = categoryList as ArrayList<Category>
         notifyDataSetChanged()
@@ -44,6 +45,5 @@ class CategoriesAdapter() : RecyclerView.Adapter<CategoriesAdapter.CategoriesVie
             onItemClick!!.invoke(categoryList[position])
         }
     }
-
 
 }

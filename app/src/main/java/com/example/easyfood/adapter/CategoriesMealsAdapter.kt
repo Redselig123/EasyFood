@@ -7,9 +7,9 @@ import com.bumptech.glide.Glide
 import com.example.easyfood.databinding.MealItemBinding
 import com.example.easyfood.pojo.MealByCategory
 
-class CategoriesMealsAdapter : RecyclerView.Adapter<CategoriesMealsAdapter.CategoriesMealsViewModel>() {
+class CategoriesMealsAdapter() : RecyclerView.Adapter<CategoriesMealsAdapter.CategoriesMealsViewModel>() {
     private var mealList = ArrayList<MealByCategory>()
-
+    lateinit var onItemClick:((MealByCategory) -> Unit)
     fun setMealsList(mealList:List<MealByCategory>){
         this.mealList = mealList as ArrayList<MealByCategory>
         notifyDataSetChanged()
@@ -24,9 +24,13 @@ class CategoriesMealsAdapter : RecyclerView.Adapter<CategoriesMealsAdapter.Categ
     override fun getItemCount(): Int {
         return mealList.size
     }
-
     override fun onBindViewHolder(holder: CategoriesMealsViewModel, position: Int) {
         Glide.with(holder.itemView).load(mealList[position].strMealThumb).into(holder.binding.imgMeal)
         holder.binding.tvMealName.text = mealList[position].strMeal
+
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(mealList[position])
+        }
     }
+
 }

@@ -110,5 +110,4 @@ class MealActivity : AppCompatActivity() {
         binding.btnFavoriteButton.visibility = View.VISIBLE
         binding.imgYoutube.visibility = View.VISIBLE
     }
-
 }
