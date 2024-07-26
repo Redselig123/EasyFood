@@ -28,7 +28,7 @@ class CategoriesMealsAdapter() : RecyclerView.Adapter<CategoriesMealsAdapter.Cat
         Glide.with(holder.itemView).load(mealList[position].strMealThumb).into(holder.binding.imgMeal)
         holder.binding.tvMealName.text = mealList[position].strMeal
 
-        holder.itemView.setOnClickListener {
+       holder.itemView.setOnClickListener {
             onItemClick.invoke(mealList[position])
         }
     }

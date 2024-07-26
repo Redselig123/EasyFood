@@ -6,9 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.easyfood.R
 import com.example.easyfood.activities.MainActivity
@@ -16,7 +20,10 @@ import com.example.easyfood.activities.MealActivity
 import com.example.easyfood.adapter.FavoritesMealsAdapter
 import com.example.easyfood.databinding.FragmentFavoritesBinding
 import com.example.easyfood.databinding.FragmentHomeBinding
+import com.example.easyfood.pojo.Meal
 import com.example.easyfood.viewModel.HomeViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class FavoritesFragment : Fragment() {
     private lateinit var binding:FragmentFavoritesBinding
@@ -47,7 +54,38 @@ class FavoritesFragment : Fragment() {
 
         prepareRecyclerView()
         observeFavorites()
-        onFavoriteItemClick()
+       onFavoriteItemClick()
+//swipe-to-dismiss and drag-and-drop. object to create an abstract to use just for this fragment. not necessary create a .ky with a this class
+        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+        ){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            )=true
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val deletedMeal = favoritesAdapter.differ.currentList.getOrNull(position)
+
+                if (deletedMeal != null) {
+                    viewModel.deleteMeal(deletedMeal)
+
+                    Snackbar.make(requireView(), "Meal Deleted", Snackbar.LENGTH_LONG).setAction(
+                        "Undo"
+                    ) {
+                        viewModel.insertMeal(deletedMeal)
+                    }.show()
+                } else {
+                    Toast.makeText(requireContext(), "Meal not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+
+        ItemTouchHelper(itemTouchHelper).attachToRecyclerView(binding.rvFavorites)
 
     }
 
@@ -64,7 +102,7 @@ class FavoritesFragment : Fragment() {
         favoritesAdapter.differ.submitList(meals)
         })
     }
-    private fun onFavoriteItemClick() {
+   private fun onFavoriteItemClick() {
         favoritesAdapter.onItemClick = { meal ->
             val intent = Intent(activity, MealActivity::class.java)
             intent.putExtra(HomeFragment.MEAL_ID, meal.idMeal)
