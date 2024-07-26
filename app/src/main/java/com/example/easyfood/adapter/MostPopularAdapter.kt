@@ -11,7 +11,7 @@ import com.example.easyfood.pojo.MealByCategory
 class MostPopularAdapter() : RecyclerView.Adapter<MostPopularAdapter.PopularMealViewHolder>() {
     private var mealList = ArrayList<MealByCategory>()
     lateinit var onItemClick:((MealByCategory) -> Unit)
-
+    var onLongItemClick:((MealByCategory)-> Unit)?= null
     fun setMeals(mealList: ArrayList<MealByCategory>) {
         this.mealList = mealList
         notifyDataSetChanged()
@@ -38,6 +38,10 @@ class MostPopularAdapter() : RecyclerView.Adapter<MostPopularAdapter.PopularMeal
 
         holder.itemView.setOnClickListener {
             onItemClick.invoke(mealList[position])
+        }
+        holder.itemView.setOnLongClickListener{
+            onLongItemClick!!.invoke(mealList[position])
+            true
         }
     }
 

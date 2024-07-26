@@ -17,6 +17,7 @@ import com.example.easyfood.adapter.CategoriesAdapter
 import com.example.easyfood.adapter.CategoriesMealsAdapter
 import com.example.easyfood.adapter.MostPopularAdapter
 import com.example.easyfood.databinding.FragmentHomeBinding
+import com.example.easyfood.fragments.bottomSheet.MealBottomSheetFragment
 import com.example.easyfood.pojo.MealByCategory
 import com.example.easyfood.pojo.Meal
 import com.example.easyfood.viewModel.HomeViewModel
@@ -75,10 +76,19 @@ class HomeFragment : Fragment() {
 
         onCategoryClick()
 
+        onPopularLongItemClick()
+
+    }
+
+    private fun onPopularLongItemClick() {
+        popularItemsAdapter.onLongItemClick = { meal ->
+            val mealBottomSheetFragment = MealBottomSheetFragment.newInstance(meal.idMeal)
+            mealBottomSheetFragment.show(childFragmentManager, "Meal Info")
+        }
     }
 
     private fun onCategoryClick() {
-        categoriesAdapter.onItemClick = {category->
+        categoriesAdapter.onItemClick = { category ->
             val intent = Intent(activity, CategoryMealsActivity::class.java)
             intent.putExtra(CATEGORY_NAME, category.strCategory)
             startActivity(intent)
@@ -87,7 +97,7 @@ class HomeFragment : Fragment() {
 
     private fun prepareCategoriesItemRecyclerView() {
         categoriesAdapter = CategoriesAdapter()
-        binding.recyclreViewCategory.apply{
+        binding.recyclreViewCategory.apply {
             layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
             adapter = categoriesAdapter
         }
