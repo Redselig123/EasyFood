@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.easyfood.databinding.MealItemBinding
 import com.example.easyfood.pojo.Meal
 
-class FavoritesMealsAdapter: RecyclerView.Adapter<FavoritesMealsAdapter.FavoritesMealsAdapterViewHolder>() {
+class MealsAdapter: RecyclerView.Adapter<MealsAdapter.FavoritesMealsAdapterViewHolder>() {
 
     var onItemClick: ((Meal) -> Unit)? = null
 

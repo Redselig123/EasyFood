@@ -34,6 +34,7 @@
             android:textStyle="bold" />
 
         <ImageView
+            android:id="@+id/imgSearch"
             android:layout_width="@dimen/_35sdp"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
