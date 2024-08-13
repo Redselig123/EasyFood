@@ -1,5 +1,6 @@
 package com.example.easyfood.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,8 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.easyfood.activities.MainActivity
+import com.example.easyfood.activities.MealActivity
 import com.example.easyfood.adapter.MealsAdapter
 import com.example.easyfood.databinding.FragmentSearchBinding
+import com.example.easyfood.pojo.Meal
 import com.example.easyfood.viewModel.HomeViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,6 +25,7 @@ class SearchFragment : Fragment() {
     private lateinit var binding :FragmentSearchBinding
     private lateinit var viewModel : HomeViewModel
     private lateinit var searchRecyclerViewAdapter:MealsAdapter
+    private lateinit var randomMeal: Meal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +59,17 @@ class SearchFragment : Fragment() {
                 viewModel.searchMeals(searchQuery.toString())
             }
         }
+        onSearchedMealClick()
+    }
+
+    private fun onSearchedMealClick() {
+        searchRecyclerViewAdapter.onItemClick = { meal ->
+            val intent = Intent(activity, MealActivity::class.java)
+            intent.putExtra(HomeFragment.MEAL_ID, meal.idMeal)
+            intent.putExtra(HomeFragment.MEAL_NAME, meal.strMeal)
+            intent.putExtra(HomeFragment.MEAL_THUMB, meal.strMealThumb)
+            startActivity(intent)
+        }
     }
 
     private fun observeSearchMealsLiveData() {
@@ -74,7 +89,7 @@ class SearchFragment : Fragment() {
     private fun prepareSearchRecyclerView() {
         searchRecyclerViewAdapter = MealsAdapter()
         binding.rvSearchMeals.apply{
-            layoutManager = GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
+            layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
             adapter = searchRecyclerViewAdapter
         }
     }

@@ -48,7 +48,7 @@ class FavoritesFragment : Fragment() {
 
         prepareRecyclerView()
         observeFavorites()
-       onFavoriteItemClick()
+        onFavoriteItemClick()
 //swipe-to-dismiss and drag-and-drop. object to create an abstract to use just for this fragment. not necessary create a .ky with a this class
         val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
